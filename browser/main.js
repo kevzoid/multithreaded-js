@@ -11,10 +11,12 @@ class Rpc_worker {
     // XXX: add batching
     exec([fn, ...args]){
         let id = this._vfd++;
-        return new Promise((resolve, reject)=>{
+        let promise = new Promise((resolve, reject)=>{
             this.in_flight.set(id, {resolve, reject});
             this.#worker.postMessage({fn, args, id});
         });
+        promise.finally(()=>this.in_flight.delete(id));
+        return promise;
     }
     onmessage({data: msg}){
         let ctx;
