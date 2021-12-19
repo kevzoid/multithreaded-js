@@ -37,7 +37,7 @@ const wrap_result = async(id, handler)=>{
 };
 
 const onmessage_handler = fn=>async msg=>{
-    let handler = ()=>fn(_.pick(msg.data, qw`id fn args`));
+    let handler = ()=>fn(_.pick(msg.data, qw`fn args`));
     self.postMessage(await wrap_result(msg.data.id, handler));
 };
 
